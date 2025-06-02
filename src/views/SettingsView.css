@@ -9,7 +9,7 @@
 
 .settings .settings-container {
     flex: 1;
-    padding: 7rem 2rem 3rem;
+    padding: 7rem 2rem 2rem;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -23,6 +23,7 @@
     width: 100%;
     max-width: 30rem;
     box-shadow: 0 0 1rem rgba(0, 0, 0, 0.3);
+    margin-bottom: 2rem;
 }
 
 .settings .settings-title {
@@ -61,6 +62,16 @@
 
 .settings .form-input:focus {
     outline: none;
+    box-shadow: 0 0 0 0.125rem rgba(0, 255, 136, 0.5);
+}
+
+.settings .form-input.google-user {
+    background-color: #363a3e;
+    border: 0.0625rem solid rgba(0, 255, 136, 0.2);
+    box-shadow: 0 0 0.25rem rgba(0, 255, 136, 0.2);
+}
+
+.settings .form-input.google-user:focus {
     box-shadow: 0 0 0 0.125rem rgba(0, 255, 136, 0.5);
 }
 
@@ -115,6 +126,8 @@
     background-color: #1d1e22;
     cursor: not-allowed;
     opacity: 0.8;
+    border: 0.0625rem solid rgba(0, 255, 136, 0.2);
+    box-shadow: 0 0 0.25rem rgba(0, 255, 136, 0.2);
 }
 
 .settings .genre-selection h2 {
@@ -193,10 +206,10 @@
     transform-origin: center center;
     transform: translateY(-50%) scale(0) rotate(-45deg);
     transition: transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1),
-        opacity 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
+                opacity 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
 }
 
-.settings .genre-checkboxes input:checked+label::after {
+.settings .genre-checkboxes input:checked + label::after {
     opacity: 1;
     transform: translateY(-50%) scale(1) rotate(0deg);
 }
@@ -205,24 +218,27 @@
     box-shadow: 0 0 1.5rem var(--checkbox-shadow);
 }
 
-/* New styles */
-.message {
-    margin-bottom: 1.5rem;
-    padding: 0.75rem;
-    border-radius: 0.25rem;
-    text-align: center;
-}
-
-.message.success {
-    background-color: rgba(0, 255, 136, 0.2);
-    border: 1px solid #00ff88;
-    color: #fff;
-}
-
-.message.error {
+/* Error message styling that matches LoginView and RegisterView */
+.error-message {
     background-color: rgba(255, 87, 87, 0.2);
     border: 1px solid #ff5757;
     color: #fff;
+    padding: 0.75rem;
+    border-radius: 0.25rem;
+    margin-bottom: 1rem;
+    text-align: center;
+    animation: fadeIn 0.3s ease;
+}
+
+.success-message {
+    background-color: rgba(0, 255, 136, 0.2);
+    border: 1px solid #00ff88;
+    color: #fff;
+    padding: 0.75rem;
+    border-radius: 0.25rem;
+    margin-bottom: 1rem;
+    text-align: center;
+    animation: fadeIn 0.3s ease;
 }
 
 .password-button {
@@ -247,19 +263,20 @@
     background: #383b40;
     border-radius: 0.5rem;
     padding: 1.5rem;
-    margin-top: 2rem;
+    margin: 1rem 0 2rem;
 }
 
 .password-form h2 {
     text-align: center;
     margin-bottom: 1.5rem;
     font-size: 1.5rem;
+    color: #00ff88;
 }
 
 .password-buttons {
     display: flex;
     gap: 1rem;
-    margin-top: 1.5rem;
+    margin-top: 2.5rem;
     justify-content: center;
 }
 
@@ -279,11 +296,22 @@
     transform: translateY(-0.2rem);
 }
 
-.purchase-history {
-    margin-top: 3rem;
+/* Redesigned purchase history container to match settings box style */
+.purchase-history-container {
+    width: 95vw;
+    margin: -2rem auto 4rem;
+    padding: 0 2rem;
 }
 
-.purchase-history h2 {
+.purchase-history-content {
+    background: #2a2d31;
+    border-radius: 0.5rem;
+    padding: 2rem;
+    box-shadow: 0 0 1rem rgba(0, 0, 0, 0.3);
+    width: 100%;
+}
+
+.purchase-history-content h2 {
     font-size: 1.8rem;
     text-transform: uppercase;
     letter-spacing: 0.1em;
@@ -292,16 +320,22 @@
     color: white;
 }
 
+/* Updated grid with smaller minimum width to fit more items per row */
 .purchase-items {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr));
-    gap: 1.5rem;
+    grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr));
+    gap: 1.25rem;
 }
 
 .purchase-item {
     display: flex;
     flex-direction: column;
     align-items: center;
+    transition: transform 0.3s ease;
+}
+
+.purchase-item:hover {
+    transform: translateY(-0.25rem);
 }
 
 .purchase-item-image {
@@ -313,18 +347,21 @@
 }
 
 .purchase-item-title {
-    font-size: 1rem;
+    font-size: 0.9rem;
     text-align: center;
     margin-top: 0.75rem;
-    height: 3em;
+    height: 2.7em;
     overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;
+    max-height: 2.7em;
 }
 
 .no-purchases {
     text-align: center;
     color: #999;
     font-style: italic;
-    padding: 2rem 0;
+    padding: 1rem 0;
 }
 
 .input-note {
@@ -337,10 +374,12 @@
 .form-input:disabled {
     background-color: #1d1e22;
     cursor: not-allowed;
-    opacity: 0.6;
+    opacity: 0.8;
+    border: 0.0625rem solid rgba(0, 255, 136, 0.2);
+    box-shadow: 0 0 0.25rem rgba(0, 255, 136, 0.2);
 }
 
-/* New CSS for user information section */
+/* User information section */
 .user-info-section {
     margin-bottom: 1rem;
     text-align: center;
@@ -356,7 +395,7 @@
 
 .auth-type-notice {
     background-color: rgba(255, 255, 255, 0.1);
-    border-left: 3px solid #00ff88;
+    border-left: 0.1875rem solid #00ff88;
     padding: 0.75rem;
     margin-bottom: 1rem;
     font-size: 0.9rem;
@@ -365,5 +404,48 @@
 
 .form-input.read-only {
     background-color: #1d1e22;
-    border: 1px dashed #424548;
+    border: 0.0625rem solid rgba(0, 255, 136, 0.2);
+    box-shadow: 0 0 0.25rem rgba(0, 255, 136, 0.2);
+}
+
+/* Increased spacing for password form groups */
+.password-form-group {
+    margin-bottom: 1.5rem;
+}
+
+.password-form-group label {
+    color: #eee;
+    font-size: 1.05rem;
+}
+
+.password-form-group input {
+    background-color: #2a2d31;
+}
+
+/* Animation for messages */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-0.3125rem);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Add to your existing SettingsView.css file */
+.loading-container {
+  min-height: 100vh;
+  background: #1d1e22;
+}
+
+.loading-message {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 50vh;
+  color: #00ff88;
+  font-size: 1.5rem;
+  text-align: center;
 }

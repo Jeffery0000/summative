@@ -1,7 +1,7 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-import { getAuth, GoogleAuthProvider } from "firebase/auth";
-import { getFirestore } from "firebase/firestore";
+import { getAuth, GoogleAuthProvider, setPersistence, browserLocalPersistence } from "firebase/auth";
+import { getFirestore, enableIndexedDbPersistence } from "firebase/firestore";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -21,9 +21,25 @@ const auth = getAuth(app);
 const firestore = getFirestore(app);
 const googleProvider = new GoogleAuthProvider();
 
-// Configure Google provider
-googleProvider.setCustomParameters({
-  prompt: 'select_account'
-});
+// IMPORTANT: Set persistence immediately - this ensures login state persists across refreshes
+// Using browserLocalPersistence to maintain login across browser sessions
+setPersistence(auth, browserLocalPersistence)
+    .catch((error) => {
+        console.error("Error setting auth persistence:", error);
+    });
 
-export { auth, firestore, googleProvider };
+// Enable offline persistence for Firestore data
+enableIndexedDbPersistence(firestore)
+    .catch((error) => {
+        if (error.code === 'failed-precondition') {
+            // Multiple tabs open, persistence can only be enabled in one tab at a time
+            console.error("Firestore persistence failed: Multiple tabs open");
+        } else if (error.code === 'unimplemented') {
+            // The current browser does not support persistence
+            console.error("Firestore persistence is not supported by this browser");
+        } else {
+            console.error("Error enabling Firestore persistence:", error);
+        }
+    });
+
+export { app, auth, firestore, googleProvider };

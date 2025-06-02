@@ -4,9 +4,9 @@ import Footer from '../components/Footer';
 import { useStoreContext } from '../context/index.jsx';
 import { useNavigate } from 'react-router-dom';
 import { useState, useRef, useEffect } from 'react';
-import { updateProfile, updateEmail, updatePassword, EmailAuthProvider, reauthenticateWithCredential } from 'firebase/auth';
+import { updateProfile, updatePassword, EmailAuthProvider, reauthenticateWithCredential } from 'firebase/auth';
 import { auth } from '../firebase/index.js';
-import { doc, updateDoc } from 'firebase/firestore';
+import { doc, updateDoc, getDoc } from 'firebase/firestore';
 import { firestore } from '../firebase/index.js';
 
 function SettingsView() {
@@ -17,9 +17,9 @@ function SettingsView() {
     email,
     selectedGenres,
     previousPurchases,
-    setFirst,
-    setLast,
-    setSelected
+    setSelected,
+    updateUserProfile,
+    isAuthReady
   } = useStoreContext();
 
   const navigate = useNavigate();
@@ -31,6 +31,13 @@ function SettingsView() {
   const [confirmNewPassword, setConfirmNewPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState({ text: '', type: '' });
+
+  // Form data separate from context to allow editing before saving
+  const [formData, setFormData] = useState({
+    firstName: '',
+    lastName: '',
+    email: ''
+  });
 
   const genres = [
     { genre: "Action", id: 28 },
@@ -45,27 +52,61 @@ function SettingsView() {
     { genre: "Horror", id: 27 }
   ];
 
-  const [formData, setFormData] = useState({
-    firstName: firstName,
-    lastName: lastName,
-  });
-
+  // Redirect if not logged in
   useEffect(() => {
-    // Check if user logged in with email/password
-    if (user && user.providerData && user.providerData.length > 0) {
-      const emailProvider = user.providerData.find(
-        provider => provider.providerId === 'password'
-      );
-      setIsEmailUser(!!emailProvider);
+    if (isAuthReady && !user) {
+      navigate('/login');
     }
+  }, [user, navigate, isAuthReady]);
 
-    // Initialize form data
-    setFormData({
-      firstName: firstName || '',
-      lastName: lastName || '',
-    });
+  // Load user data from Firestore directly to ensure we have the most current values
+  useEffect(() => {
+    const loadUserData = async () => {
+      if (!user || !user.uid) return;
 
-    // Initialize genre checkboxes
+      try {
+        const userDocRef = doc(firestore, "users", user.uid);
+        const userDoc = await getDoc(userDocRef);
+
+        if (userDoc.exists()) {
+          const userData = userDoc.data();
+
+          // Update form data with values from Firestore
+          setFormData({
+            firstName: userData.firstName || '',
+            lastName: userData.lastName || '',
+            email: userData.email || user.email || ''
+          });
+
+          // Log the loaded data for debugging
+          console.log("Loaded user data from Firestore:", userData);
+        } else {
+          console.log("No user document found in Firestore");
+          // Fallback to auth user info
+          setFormData({
+            firstName: firstName || '',
+            lastName: lastName || '',
+            email: user.email || email || ''
+          });
+        }
+
+        // Check auth provider
+        if (user.providerData && user.providerData.length > 0) {
+          const emailProvider = user.providerData.find(
+            provider => provider.providerId === 'password'
+          );
+          setIsEmailUser(!!emailProvider);
+        }
+      } catch (error) {
+        console.error("Error loading user data:", error);
+      }
+    };
+
+    loadUserData();
+  }, [user, firstName, lastName, email]);
+
+  // Initialize genre checkboxes when selectedGenres changes
+  useEffect(() => {
     if (selectedGenres && selectedGenres.length > 0) {
       setTimeout(() => {
         selectedGenres.forEach(genre => {
@@ -75,7 +116,7 @@ function SettingsView() {
         });
       }, 100);
     }
-  }, [user, selectedGenres, firstName, lastName]);
+  }, [selectedGenres]);
 
   const handleChange = (e) => {
     setFormData({
@@ -123,11 +164,16 @@ function SettingsView() {
 
       await updateDoc(userDocRef, updates);
 
-      // Update context
+      // Update context - use updateUserProfile instead of setFirst/setLast
       setSelected(updatedGenres);
+
+      // Update user profile in context if needed
       if (isEmailUser) {
-        setFirst(formData.firstName);
-        setLast(formData.lastName);
+        // Use the updateUserProfile function from context instead
+        await updateUserProfile(user.uid, {
+          firstName: formData.firstName,
+          lastName: formData.lastName
+        });
       }
 
       setMessage({ text: 'Settings updated successfully!', type: 'success' });
@@ -179,6 +225,16 @@ function SettingsView() {
     }
   };
 
+  // Show loading if auth is not yet ready or user is not loaded
+  if (!isAuthReady || !user) {
+    return (
+      <div className="settings loading-container">
+        <Header />
+        <div className="loading-message">Loading user data...</div>
+      </div>
+    );
+  }
+
   return (
     <div className="settings">
       <Header />
@@ -187,69 +243,59 @@ function SettingsView() {
           <h1 className="settings-title">Account Settings</h1>
 
           {message.text && (
-            <div className={`message ${message.type}`}>
-              {message.text}
-            </div>
+            <div className={message.type === 'error' ? "error-message" : "success-message"}>{message.text}</div>
           )}
 
           <div className="user-info-section">
             <h2>User Information</h2>
             {!isEmailUser && (
-              <div className="auth-type-notice">
-                You signed in with Google. Only email/password users can modify their name and password.
-              </div>
+              <div className="auth-type-notice">You signed in with Google. Only email/password users can modify their name and password.</div>
             )}
           </div>
 
           <form className="settings-form" onSubmit={handleSave}>
             <div className="form-group">
               <label className="form-label" htmlFor="firstName">First Name</label>
-              <input
-                className={`form-input ${!isEmailUser ? 'read-only' : ''}`}
-                id="firstName"
-                name="firstName"
-                type="text"
-                value={formData.firstName}
-                onChange={handleChange}
-                disabled={loading || !isEmailUser}
-              />
-              {!isEmailUser && (
-                <div className="input-note">Name can only be changed by email/password users</div>
-              )}
+              <input className={`form-input ${!isEmailUser ? 'read-only' : ''}`} id="firstName" name="firstName" type="text" value={formData.firstName} onChange={handleChange} disabled={!isEmailUser || loading} />
+              {!isEmailUser && (<div className="input-note">Name can only be changed by email/password users</div>)}
             </div>
             <div className="form-group">
               <label className="form-label" htmlFor="lastName">Last Name</label>
-              <input
-                className={`form-input ${!isEmailUser ? 'read-only' : ''}`}
-                id="lastName"
-                name="lastName"
-                type="text"
-                value={formData.lastName}
-                onChange={handleChange}
-                disabled={loading || !isEmailUser}
-              />
+              <input className={`form-input ${!isEmailUser ? 'read-only' : ''}`} id="lastName" name="lastName" type="text" value={formData.lastName} onChange={handleChange} disabled={!isEmailUser || loading} />
             </div>
             <div className="form-group">
               <label className="form-label" htmlFor="email">Email</label>
-              <input
-                className="form-input email-display"
-                id="email"
-                name="email"
-                type="email"
-                value={email}
-                readOnly
-              />
+              <input className="form-input read-only" id="email" name="email" type="email" value={formData.email} disabled={true} readOnly />
             </div>
 
             {isEmailUser && !showPasswordUpdate && (
-              <button
-                type="button"
-                className="password-button"
-                onClick={() => setShowPasswordUpdate(true)}
-                disabled={loading}
-              >
-                Change Password
-              </button>
+              <button type="button" className="password-button" onClick={() => setShowPasswordUpdate(true)} disabled={loading}>Change Password</button>
+            )}
+
+            {showPasswordUpdate && (
+              <div className="password-form">
+                <h2>Change Password</h2>
+
+                <div className="form-group password-form-group">
+                  <label className="form-label" htmlFor="currentPassword">Current Password</label>
+                  <input className="form-input" id="currentPassword" type="password" value={currentPassword} onChange={(e) => setCurrentPassword(e.target.value)} disabled={loading} required />
+                </div>
+
+                <div className="form-group password-form-group">
+                  <label className="form-label" htmlFor="newPassword">New Password</label>
+                  <input className="form-input" id="newPassword" type="password" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} disabled={loading} required />
+                </div>
+
+                <div className="form-group password-form-group">
+                  <label className="form-label" htmlFor="confirmNewPassword">Confirm New Password</label>
+                  <input className="form-input" id="confirmNewPassword" type="password" value={confirmNewPassword} onChange={(e) => setConfirmNewPassword(e.target.value)} disabled={loading} required />
+                </div>
+
+                <div className="password-buttons">
+                  <button type="button" className="save-button" onClick={handlePasswordUpdate} disabled={loading}>{loading ? 'Updating...' : 'Update Password'}</button>
+                  <button type="button" className="cancel-button" onClick={() => { setShowPasswordUpdate(false); setCurrentPassword(''); setNewPassword(''); setConfirmNewPassword(''); }} disabled={loading}>Cancel</button>
+                </div>
+              </div>
             )}
 
             <div className='genre-selection'>
@@ -258,12 +304,7 @@ function SettingsView() {
                 {genres.map((item) => {
                   return (
                     <div key={item.id}>
-                      <input
-                        type='checkbox'
-                        id={`genre-${item.id}`}
-                        ref={(el) => (checkBoxes.current[item.id] = el)}
-                        disabled={loading}
-                      />
+                      <input type='checkbox' id={`genre-${item.id}`} ref={(el) => (checkBoxes.current[item.id] = el)} disabled={loading} />
                       <label htmlFor={`genre-${item.id}`}>{item.genre}</label>
                     </div>
                   );
@@ -272,112 +313,28 @@ function SettingsView() {
             </div>
 
             <div className="settings-buttons">
-              <button
-                type="submit"
-                className="save-button"
-                disabled={loading}
-              >
-                {loading ? 'Saving...' : 'Save Changes'}
-              </button>
-              <button
-                type="button"
-                className="back-button"
-                onClick={() => navigate('/movies')}
-                disabled={loading}
-              >
-                Back
-              </button>
+              <button type="submit" className="save-button" disabled={loading}>{loading ? 'Saving...' : 'Save Changes'}</button>
+              <button type="button" className="back-button" onClick={() => navigate('/movies')} disabled={loading}>Back</button>
             </div>
           </form>
+        </div>
+      </div>
 
-          {showPasswordUpdate && (
-            <form className="password-form" onSubmit={handlePasswordUpdate}>
-              <h2>Change Password</h2>
-
-              <div className="form-group">
-                <label className="form-label" htmlFor="currentPassword">Current Password</label>
-                <input
-                  className="form-input"
-                  id="currentPassword"
-                  type="password"
-                  value={currentPassword}
-                  onChange={(e) => setCurrentPassword(e.target.value)}
-                  disabled={loading}
-                  required
-                />
-              </div>
-
-              <div className="form-group">
-                <label className="form-label" htmlFor="newPassword">New Password</label>
-                <input
-                  className="form-input"
-                  id="newPassword"
-                  type="password"
-                  value={newPassword}
-                  onChange={(e) => setNewPassword(e.target.value)}
-                  disabled={loading}
-                  required
-                />
-              </div>
-
-              <div className="form-group">
-                <label className="form-label" htmlFor="confirmNewPassword">Confirm New Password</label>
-                <input
-                  className="form-input"
-                  id="confirmNewPassword"
-                  type="password"
-                  value={confirmNewPassword}
-                  onChange={(e) => setConfirmNewPassword(e.target.value)}
-                  disabled={loading}
-                  required
-                />
-              </div>
-
-              <div className="password-buttons">
-                <button
-                  type="submit"
-                  className="save-button"
-                  disabled={loading}
-                >
-                  {loading ? 'Updating...' : 'Update Password'}
-                </button>
-                <button
-                  type="button"
-                  className="cancel-button"
-                  onClick={() => {
-                    setShowPasswordUpdate(false);
-                    setCurrentPassword('');
-                    setNewPassword('');
-                    setConfirmNewPassword('');
-                  }}
-                  disabled={loading}
-                >
-                  Cancel
-                </button>
-              </div>
-            </form>
+      <div className="purchase-history-container">
+        <div className="purchase-history-content">
+          <h2>Purchase History</h2>
+          {previousPurchases && previousPurchases.length > 0 ? (
+            <div className="purchase-items">
+              {previousPurchases.map((item) => (
+                <div key={item.id} className="purchase-item">
+                  <img className="purchase-item-image" src={`https://image.tmdb.org/t/p/w200${item.poster_path}`} alt={item.title} />
+                  <h3 className="purchase-item-title">{item.title}</h3>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p className="no-purchases">You haven't made any purchases yet.</p>
           )}
-
-          {/* Purchase History Section */}
-          <div className="purchase-history">
-            <h2>Purchase History</h2>
-            {previousPurchases && previousPurchases.length > 0 ? (
-              <div className="purchase-items">
-                {previousPurchases.map((item) => (
-                  <div key={item.id} className="purchase-item">
-                    <img
-                      className="purchase-item-image"
-                      src={`https://image.tmdb.org/t/p/w200${item.poster_path}`}
-                      alt={item.title}
-                    />
-                    <h3 className="purchase-item-title">{item.title}</h3>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <p className="no-purchases">You haven't made any purchases yet.</p>
-            )}
-          </div>
         </div>
       </div>
       <Footer />
