@@ -1,16 +1,28 @@
 import './Header.css';
 import logoImage from '../assets/logo.png';
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useStoreContext } from '../context/index.jsx';
+import { signOut } from 'firebase/auth';
+import { auth } from '../firebase/index.js';
 
 function Header() {
     const navigate = useNavigate();
-    const { firstName } = useStoreContext();
-    const { loggedIn, setLoggedIn } = useStoreContext();
+    const { user } = useStoreContext();
+    
+    // Enhanced display name extraction with fallbacks
+    const firstName = user?.displayName 
+        ? user.displayName.split(' ')[0] 
+        : user?.email 
+            ? user.email.split('@')[0] 
+            : 'User';
 
-    const handleLogout = () => {
-        setLoggedIn(false);
-        navigate('/');
+    const handleLogout = async () => {
+        try {
+            await signOut(auth);
+            navigate('/');
+        } catch (error) {
+            console.error("Error signing out:", error);
+        }
     };
 
     const handleSearch = () => {
@@ -24,14 +36,12 @@ function Header() {
                 <img className="logo-image" src={logoImage} alt="Logo Image" />
             </div>
             <div className="welcome-container">
-                {loggedIn ? (
-                    <> <p className="welcome-message">Hello, {firstName}!</p> </>
-                ) : (
-                    <></>
+                {user && (
+                    <p className="welcome-message">Hello, {firstName}!</p>
                 )}
             </div>
             <div className="header-buttons">
-                {loggedIn ? (
+                {user ? (
                     <>
                         <button onClick={handleSearch}>Search</button>
                         <button onClick={() => navigate("/cart")}>Cart</button>

@@ -8,12 +8,13 @@ function DetailView() {
     const [trailers, setTrailers] = useState([]);
     const [movie, setMovie] = useState([]);
     const { id } = useParams();
-    const { cart, setCart } = useStoreContext();
+    const { cart, setCart, previousPurchases } = useStoreContext();
 
     const isInCart = movie.id && cart.some(item => item.id === movie.id);
+    const isPurchased = movie.id && previousPurchases && previousPurchases.some(item => item.id === movie.id);
 
     const handleBuy = () => {
-        if (!isInCart && movie) {
+        if (!isInCart && !isPurchased && movie) {
             const updatedCart = [...cart, movie];
             setCart(updatedCart);
         }
@@ -40,7 +41,13 @@ function DetailView() {
             <div className="movie-content">
                 <div className="movie-info">
                     <h1 className="movie-title">{movie.original_title}</h1>
-                    <button className="buy-button" onClick={handleBuy} disabled={isInCart}>{isInCart ? 'Added' : 'Buy'}</button>
+                    <button 
+                        className="buy-button" 
+                        onClick={handleBuy} 
+                        disabled={isInCart || isPurchased}
+                    >
+                        {isPurchased ? 'Purchased' : isInCart ? 'Added' : 'Buy'}
+                    </button>
                     <p className="movie-overview">{movie.overview}</p>
                     <div className="movie-details">
                         <p>Status: {movie.status}</p>

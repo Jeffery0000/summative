@@ -11,7 +11,7 @@ function SearchView() {
     const [loading, setLoading] = useState(false);
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(0);
-    const { cart, setCart } = useStoreContext();
+    const { cart, setCart, previousPurchases } = useStoreContext();
 
     useEffect(() => {
         const timer = setTimeout(() => {
@@ -62,6 +62,10 @@ function SearchView() {
         }
     };
 
+    const isMoviePurchased = (movieId) => {
+        return previousPurchases && previousPurchases.some(item => item.id === movieId);
+    };
+
     return (
         <div className='search-view'>
             <h1>Search Movies</h1>
@@ -79,6 +83,8 @@ function SearchView() {
                         {movies.length > 0 ? (
                             movies.map((movie) => {
                                 const isInCart = cart.some(item => item.id === movie.id);
+                                const isPurchased = isMoviePurchased(movie.id);
+                                
                                 return (
                                     <div key={movie.id} className="search-result-item">
                                         <div className="search-result-poster">
@@ -90,7 +96,13 @@ function SearchView() {
                                                 )}
                                             </Link>
                                         </div>
-                                        <button className="buy-button" onClick={() => handleBuy(movie.id)} disabled={isInCart}>{isInCart ? 'Added' : 'Buy'}</button>
+                                        <button 
+                                            className="buy-button" 
+                                            onClick={() => handleBuy(movie.id)} 
+                                            disabled={isInCart || isPurchased}
+                                        >
+                                            {isPurchased ? 'Purchased' : isInCart ? 'Added' : 'Buy'}
+                                        </button>
                                     </div>
                                 );
                             })

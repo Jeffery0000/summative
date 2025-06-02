@@ -21,7 +21,7 @@ function GenreView() {
     const { genreID } = useParams();
     const [movies, setMovies] = useState([]);
     const [page, setPage] = useState(1);
-    const { cart, setCart } = useStoreContext();
+    const { cart, setCart, previousPurchases } = useStoreContext();
     const selectedGenre = genres.find(genre => genre.id === parseInt(genreID));
     const genreName = selectedGenre ? selectedGenre.genre : "Movies in Genre";
 
@@ -49,6 +49,10 @@ function GenreView() {
         }
     }
 
+    const isMoviePurchased = (movieId) => {
+        return previousPurchases && previousPurchases.some(item => item.id === movieId);
+    };
+
     return (
         <div className="genre-view">
             <h1>{genreName}</h1>
@@ -56,6 +60,8 @@ function GenreView() {
                 {movies.length > 0 ? (
                     movies.map((movie) => {
                         const isInCart = cart.some(item => item.id === movie.id);
+                        const isPurchased = isMoviePurchased(movie.id);
+                        
                         return (
                             <div key={movie.id} className="genre-view-item">
                                 <div className="genre-view-poster">
@@ -67,7 +73,13 @@ function GenreView() {
                                         )}
                                     </Link>
                                 </div>
-                                <button className="buy-button" onClick={() => handleBuy(movie.id)} disabled={isInCart}>{isInCart ? 'Added' : 'Buy'}</button>
+                                <button 
+                                    className="buy-button" 
+                                    onClick={() => handleBuy(movie.id)} 
+                                    disabled={isInCart || isPurchased}
+                                >
+                                    {isPurchased ? 'Purchased' : isInCart ? 'Added' : 'Buy'}
+                                </button>
                             </div>
                         )
                     })

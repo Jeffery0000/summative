@@ -204,3 +204,166 @@
 .settings .genre-checkboxes div:hover label::before {
     box-shadow: 0 0 1.5rem var(--checkbox-shadow);
 }
+
+/* New styles */
+.message {
+    margin-bottom: 1.5rem;
+    padding: 0.75rem;
+    border-radius: 0.25rem;
+    text-align: center;
+}
+
+.message.success {
+    background-color: rgba(0, 255, 136, 0.2);
+    border: 1px solid #00ff88;
+    color: #fff;
+}
+
+.message.error {
+    background-color: rgba(255, 87, 87, 0.2);
+    border: 1px solid #ff5757;
+    color: #fff;
+}
+
+.password-button {
+    margin: 0.5rem 0 1.5rem;
+    padding: 0.75rem 1.5rem;
+    background-color: #424548;
+    color: white;
+    border: none;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    align-self: center;
+}
+
+.password-button:hover {
+    background-color: #5a5d61;
+    transform: translateY(-0.2rem);
+}
+
+.password-form {
+    background: #383b40;
+    border-radius: 0.5rem;
+    padding: 1.5rem;
+    margin-top: 2rem;
+}
+
+.password-form h2 {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    font-size: 1.5rem;
+}
+
+.password-buttons {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;
+    justify-content: center;
+}
+
+.cancel-button {
+    padding: 0.75rem 1.5rem;
+    background-color: #424548;
+    color: white;
+    border: none;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.cancel-button:hover {
+    background-color: #5a5d61;
+    transform: translateY(-0.2rem);
+}
+
+.purchase-history {
+    margin-top: 3rem;
+}
+
+.purchase-history h2 {
+    font-size: 1.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    color: white;
+}
+
+.purchase-items {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr));
+    gap: 1.5rem;
+}
+
+.purchase-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.purchase-item-image {
+    width: 100%;
+    aspect-ratio: 2/3;
+    object-fit: cover;
+    border-radius: 0.5rem;
+    box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.3);
+}
+
+.purchase-item-title {
+    font-size: 1rem;
+    text-align: center;
+    margin-top: 0.75rem;
+    height: 3em;
+    overflow: hidden;
+}
+
+.no-purchases {
+    text-align: center;
+    color: #999;
+    font-style: italic;
+    padding: 2rem 0;
+}
+
+.input-note {
+    font-size: 0.8rem;
+    color: #999;
+    margin-top: 0.25rem;
+    font-style: italic;
+}
+
+.form-input:disabled {
+    background-color: #1d1e22;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+/* New CSS for user information section */
+.user-info-section {
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+.user-info-section h2 {
+    margin-bottom: 0.5rem;
+    font-size: 1.3rem;
+    color: #00ff88;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.auth-type-notice {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-left: 3px solid #00ff88;
+    padding: 0.75rem;
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+    border-radius: 0 0.25rem 0.25rem 0;
+}
+
+.form-input.read-only {
+    background-color: #1d1e22;
+    border: 1px dashed #424548;
+}
