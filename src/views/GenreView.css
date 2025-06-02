@@ -1,0 +1,108 @@
+.genre-view {
+    margin-left: 12rem;
+    padding: 2rem;
+    min-height: 100vh;
+    background: #1d1e22;
+    color: white;
+}
+
+.genre-view h1 {
+    font-size: 2.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.125em;
+    margin-bottom: 2rem;
+    text-align: center;
+    color: white;
+}
+
+.genre-view-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(11.25rem, 1fr));
+    gap: 2rem;
+    padding: 1rem 0;
+}
+
+.genre-view-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: transform 0.3s ease;
+}
+
+.genre-view-image:hover {
+    transform: scale(1.05);
+}
+
+.genre-view-image {
+    width: 100%;
+    aspect-ratio: 2/3;
+    object-fit: cover;
+    border-radius: 0.5rem;
+    box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease;
+}
+
+.genre-view .buy-button {
+    margin-top: 0.7rem;
+    padding: 0.75rem 2rem;
+    background: linear-gradient(45deg, #00ff88, #00ffcc);
+    color: #000;
+    font-weight: 600;
+    border: none;
+    border-radius: 0.5rem;
+    box-shadow: 0 0 0.9rem rgba(0, 255, 136, 0.4);
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.genre-view .buy-button:hover:enabled {
+    transform: translateY(-0.2rem);
+    box-shadow: 0 0 1.25rem rgba(0, 255, 136, 0.6);
+}
+
+.genre-view .buy-button:disabled {
+    background: #ccc;
+    color: #666;
+    box-shadow: none;
+    cursor: default;
+}
+
+.genre-view .no-image {
+    width: 100%;
+    aspect-ratio: 2/3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #2a2d31;
+    color: white;
+    border-radius: 0.5rem;
+    text-align: center;
+    padding: 1rem;
+}
+
+.genre-view-pagination {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 3rem;
+    margin-bottom: 2rem;
+}
+
+.genre-view-pagination-button {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 0.25rem;
+    background-color: #2a2d31;
+    color: white;
+    font-weight: 600;
+    letter-spacing: 0.05rem;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    border: 0.0625rem solid #424548;
+}
+
+.genre-view-pagination-button:hover {
+    background-color: #424548;
+    transform: translateY(-0.125rem);
+}

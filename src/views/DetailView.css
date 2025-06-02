@@ -1,0 +1,134 @@
+.detail-view {
+    margin-left: 12rem;
+    padding: 2rem;
+    min-height: 100vh;
+    background: #1d1e22;
+    color: white;
+}
+
+.detail-view .movie-content {
+    display: flex;
+    flex-direction: row-reverse;
+    gap: 2rem;
+    margin-bottom: 3rem;
+    flex-wrap: wrap;
+    align-items: flex-start;
+}
+
+.detail-view .movie-info {
+    flex: 1;
+    min-width: 20rem;
+}
+
+.detail-view .movie-title {
+    font-size: 2.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.125em;
+    margin-bottom: 1.5rem;
+    color: white;
+}
+
+.detail-view .movie-overview {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-top: 0;
+    margin-bottom: 2rem;
+}
+
+.detail-view .movie-poster {
+    width: 22rem;
+    height: 33rem;
+    object-fit: cover;
+    border-radius: 0.5rem;
+    box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.3);
+}
+
+.detail-view .movie-info p {
+    margin: 1rem 0;
+    font-size: 1rem;
+    color: #d8d8d8;
+    font-weight: bold;
+}
+
+.detail-view .trailers-section {
+    margin-top: 2rem;
+}
+
+.detail-view .trailers-section h2 {
+    font-size: 1.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.125em;
+    margin-bottom: 1.5rem;
+    color: white;
+}
+
+.detail-view .trailers-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 2rem;
+}
+
+.detail-view .trailer-tile {
+    transition: transform 0.3s ease;
+}
+
+.detail-view .trailer-tile:hover {
+    transform: scale(1.05);
+}
+
+.detail-view .trailer-tile a {
+    text-decoration: none;
+    color: white;
+}
+
+.detail-view .trailer-thumbnail {
+    width: 100%;
+    border-radius: 0.5rem;
+    margin-bottom: 0.75rem;
+    box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.3);
+}
+
+.detail-view .trailer-tile h3 {
+    font-size: 1rem;
+    text-align: center;
+    font-weight: 600;
+}
+
+.detail-view .title-action {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.detail-view .buy-button {
+    padding: 0.75rem 2rem;
+    background: linear-gradient(45deg, #00ff88, #00ffcc);
+    color: #000;
+    font-weight: 600;
+    border: none;
+    border-radius: 0.5rem;
+    box-shadow: 0 0 0.9rem rgba(0, 255, 136, 0.4);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    margin-bottom: 1.5rem;
+    display: block;
+}
+
+.detail-view .buy-button:hover:enabled {
+    transform: translateY(-0.2rem);
+    box-shadow: 0 0 1.25rem rgba(0, 255, 136, 0.6);
+}
+
+.detail-view .buy-button:disabled {
+    background: #ccc;
+    color: #666;
+    box-shadow: none;
+    cursor: default;
+}
+
+.detail-view .movie-details {
+    margin-top: 1.5rem;
+}

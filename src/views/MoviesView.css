@@ -1,0 +1,15 @@
+.movies {
+    background: #1d1e22;
+    min-height: 100vh;
+    color: white;
+    position: relative;
+}
+
+.movies .genre-movies {
+    padding: 6rem 1rem 2rem;
+    min-height: calc(100vh - 16rem);
+}
+
+.movies .footer {
+    margin-left: 10rem;
+}

@@ -1,0 +1,83 @@
+.login {
+    min-height: 100vh;
+    background: #1d1e22;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    padding-bottom: 10rem;
+    font-family: 'Arial', sans-serif;
+}
+
+.login-title {
+    font-size: 2.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.125em;
+    margin-bottom: 2rem;
+}
+
+.login-form {
+    background: #2a2d31;
+    border-radius: 0.5rem;
+    padding: 2rem;
+    width: 100%;
+    max-width: 30rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.login .form-label {
+    font-size: 1rem;
+    margin: 0.5rem 0;
+    font-family: 'Arial', sans-serif;
+    font-weight: bold;
+    text-align: center;
+    color: white;
+    font-size: 1rem;
+    margin: 0.5rem;
+}
+
+.login .form-input {
+    padding: 0.75rem;
+    margin-bottom: 1rem;
+    border: none;
+    border-radius: 0.25rem;
+    background-color: #424548;
+    color: white;
+    font-size: 1rem;
+}
+
+.login .form-input:focus {
+    outline: none;
+    box-shadow: 0 0 0 0.125rem rgba(255, 255, 255, 0.5);
+}
+
+.login .submit-button {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 0.25rem;
+    background-color: #2a2d31;
+    color: white;
+    font-weight: 600;
+    letter-spacing: 0.05rem;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    margin-top: 1rem;
+    align-self: center;
+    border: 0.0625rem solid #424548;
+}
+
+.login .submit-button:hover {
+    background-color: #424548;
+    transform: translateY(-0.125rem);
+}
+
+.login .form-input:focus {
+    outline: none;
+    box-shadow: 0 0 0 0.125rem rgba(0, 255, 136, 0.5);
+    border-color: #00ff88;
+    transition: box-shadow 0.3s ease;
+}

@@ -1,0 +1,10 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    overflow-x: hidden;
+    font-family: 'Arial', sans-serif;
+    background: #2a2d31;
+}

@@ -1,0 +1,206 @@
+.settings {
+    min-height: 100vh;
+    background: #1d1e22;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    font-family: 'Arial', sans-serif;
+}
+
+.settings .settings-container {
+    flex: 1;
+    padding: 7rem 2rem 3rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.settings .settings-box {
+    background: #2a2d31;
+    border-radius: 0.5rem;
+    padding: 2rem;
+    width: 100%;
+    max-width: 30rem;
+    box-shadow: 0 0 1rem rgba(0, 0, 0, 0.3);
+}
+
+.settings .settings-title {
+    font-size: 2rem;
+    text-transform: uppercase;
+    letter-spacing: 0.125em;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    color: white;
+}
+
+.settings .settings-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.settings .form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.settings .form-label {
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+
+.settings .form-input {
+    padding: 0.75rem;
+    border: none;
+    border-radius: 0.25rem;
+    background-color: #424548;
+    color: white;
+    font-size: 1rem;
+}
+
+.settings .form-input:focus {
+    outline: none;
+    box-shadow: 0 0 0 0.125rem rgba(0, 255, 136, 0.5);
+}
+
+.settings .genre-title {
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+    font-weight: 600;
+    text-shadow: 0 0 0.3rem rgba(0, 255, 136, 0.4);
+}
+
+.settings .settings-buttons {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+    justify-content: center;
+}
+
+.settings .save-button {
+    padding: 0.75rem 2rem;
+    background: linear-gradient(45deg, #00ff88, #00ffcc);
+    color: #000;
+    font-weight: 600;
+    border: none;
+    border-radius: 0.5rem;
+    box-shadow: 0 0 0.9rem rgba(0, 255, 136, 0.4);
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.settings .save-button:hover {
+    transform: translateY(-0.2rem);
+    box-shadow: 0 0 1.25rem rgba(0, 255, 136, 0.6);
+}
+
+.settings .back-button {
+    padding: 0.75rem 1.5rem;
+    background-color: #424548;
+    color: white;
+    border: none;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.settings .back-button:hover {
+    background-color: #5a5d61;
+    transform: translateY(-0.2rem);
+}
+
+.settings .email-display {
+    background-color: #1d1e22;
+    cursor: not-allowed;
+    opacity: 0.8;
+}
+
+.settings .genre-selection h2 {
+    font-size: 1.5rem;
+    text-align: center;
+    margin-bottom: 1.5rem;
+    letter-spacing: 0.05rem;
+    color: #fff;
+    font-weight: 700;
+    text-shadow: 0 0 0.5rem rgba(0, 255, 136, 0.4);
+}
+
+.settings .genre-checkboxes {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    width: 100%;
+}
+
+.settings .genre-checkboxes div {
+    --checkbox-size: 1.5625rem;
+    --checkbox-color: #00ff88;
+    --checkbox-shadow: rgba(0, 255, 136, 0.3);
+    --checkbox-border: rgba(0, 255, 136, 0.7);
+    display: flex;
+    align-items: center;
+    position: relative;
+    cursor: pointer;
+    padding: 0.5rem;
+}
+
+.settings .genre-checkboxes input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+.settings .genre-checkboxes label {
+    display: flex;
+    align-items: center;
+    position: relative;
+    cursor: pointer;
+    padding: 0.5rem;
+    padding-left: 2.5rem;
+    font-size: 1rem;
+}
+
+.settings .genre-checkboxes label::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: var(--checkbox-size);
+    height: var(--checkbox-size);
+    border: 0.125rem solid var(--checkbox-border);
+    border-radius: 0.5rem;
+    background: rgba(0, 0, 0, 0.2);
+    box-shadow: 0 0 0.9rem var(--checkbox-shadow);
+    transition: box-shadow 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
+    overflow: hidden;
+}
+
+.settings .genre-checkboxes label::after {
+    content: "";
+    position: absolute;
+    left: -0rem;
+    top: calc(50% - 0rem);
+    width: calc(var(--checkbox-size) + 2 * 0.125rem);
+    height: calc(var(--checkbox-size) + 2 * 0.125rem);
+    background: linear-gradient(45deg, var(--checkbox-color), #00ffcc);
+    border-radius: 0.5rem;
+    opacity: 0;
+    transform-origin: center center;
+    transform: translateY(-50%) scale(0) rotate(-45deg);
+    transition: transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1),
+        opacity 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+.settings .genre-checkboxes input:checked+label::after {
+    opacity: 1;
+    transform: translateY(-50%) scale(1) rotate(0deg);
+}
+
+.settings .genre-checkboxes div:hover label::before {
+    box-shadow: 0 0 1.5rem var(--checkbox-shadow);
+}

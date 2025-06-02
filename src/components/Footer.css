@@ -1,0 +1,86 @@
+.footer .copywrite {
+    text-align: center;
+}
+
+.footer {
+    width: 100%;
+    background: #2a2d31;
+    color: #fff;
+    padding-bottom: 2rem;
+    position: relative;
+    margin-top: -2rem;
+}
+
+.footer a {
+    margin: 0 3.5vw;
+}
+
+.footer .logo-image {
+    width: 5rem;
+    height: auto;
+    object-fit: cover;
+    display: block;
+    border-radius: 50%;
+    border: 0.05rem solid white;
+}
+
+.footer h1 {
+    color: white;
+    font-size: 2rem;
+    text-transform: uppercase;
+    letter-spacing: 0.125em;
+    padding-left: 6vw;
+}
+
+.footer .title {
+    display: flex;
+    align-items: center;
+    gap: 2vw;
+    padding-top: 3rem;
+    padding-bottom: 1rem;
+    margin: 1rem 0rem 1rem;
+}
+
+.github-icon,
+.classroom-logo,
+.assignment-logo,
+.email-logo {
+    width: 5vw;
+}
+
+.footer .footer-columns {
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-start;
+    margin-bottom: 2rem;
+}
+
+.footer .links {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.footer p {
+    font-family: 'Arial', sans-serif;
+    font-weight: bold;
+    text-align: center;
+    color: white;
+    font-size: 1rem;
+    margin: 0.5rem;
+}
+
+.footer .contacts {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.link-row,
+.contact-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    gap: 0.5rem;
+}
