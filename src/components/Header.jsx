@@ -7,10 +7,10 @@ import { auth } from '../firebase/index.js';
 
 function Header() {
     const navigate = useNavigate();
-    const { user, firstName } = useStoreContext();
+    const { user, userData } = useStoreContext();
 
-    // Use firstName from context first, then fall back to other methods
-    const displayName = firstName ||
+    // Use firstName from userData (Firestore) first, then fall back to other methods
+    const displayName = userData?.firstName || 
         (user?.displayName
             ? user.displayName.split(' ')[0]
             : user?.email

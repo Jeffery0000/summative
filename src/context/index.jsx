@@ -7,9 +7,7 @@ const StoreContext = createContext();
 
 export function StoreProvider({ children }) {
     const [user, setUser] = useState(null);
-    const [firstName, setFirst] = useState('');
-    const [lastName, setLast] = useState('');
-    const [email, setEmail] = useState('');
+    const [userData, setUserData] = useState(null);
     const [selectedGenres, setSelected] = useState([]);
     const [previousPurchases, setPurchases] = useState([]);
     const [isAuthReady, setIsAuthReady] = useState(false);
@@ -38,21 +36,17 @@ export function StoreProvider({ children }) {
                 try {
                     const userDoc = await getDoc(doc(firestore, "users", currentUser.uid));
                     if (userDoc.exists()) {
-                        const userData = userDoc.data();
-                        setFirst(userData.firstName || '');
-                        setLast(userData.lastName || '');
-                        setEmail(userData.email || currentUser.email || '');
-                        setSelected(userData.selectedGenres || []);
-                        setPurchases(userData.purchases || []);
+                        const data = userDoc.data();
+                        setUserData(data); // Store the full user data for components to access
+                        setSelected(data.selectedGenres || []);
+                        setPurchases(data.purchases || []);
                     }
                 } catch (error) {
                     console.error("Error loading user data:", error);
                 }
             } else {
                 setUser(null);
-                setFirst('');
-                setLast('');
-                setEmail('');
+                setUserData(null);
                 setSelected([]);
                 setPurchases([]);
                 // Don't clear cart when user logs out - keep it in localStorage
@@ -75,11 +69,18 @@ export function StoreProvider({ children }) {
             await updateDoc(userDocRef, updates);
 
             // Update in context state
-            if (updates.firstName) setFirst(updates.firstName);
-            if (updates.lastName) setLast(updates.lastName);
-            if (updates.email) setEmail(updates.email);
-            if (updates.selectedGenres) setSelected(updates.selectedGenres);
-            if (updates.purchases) setPurchases(updates.purchases);
+            if (updates) {
+                // Get the latest user data after update
+                const userDoc = await getDoc(userDocRef);
+                if (userDoc.exists()) {
+                    const updatedData = userDoc.data();
+                    setUserData(updatedData);
+                    
+                    // Only update specific context states
+                    if (updates.selectedGenres) setSelected(updates.selectedGenres);
+                    if (updates.purchases) setPurchases(updates.purchases);
+                }
+            }
 
             return true;
         } catch (error) {
@@ -97,8 +98,8 @@ export function StoreProvider({ children }) {
             const userDoc = await getDoc(userDocRef);
             
             if (userDoc.exists()) {
-                const userData = userDoc.data();
-                const updatedPurchases = [...(userData.purchases || []), ...cart];
+                const data = userDoc.data();
+                const updatedPurchases = [...(data.purchases || []), ...cart];
                 
                 // Update Firestore
                 await updateDoc(userDocRef, {
@@ -120,17 +121,12 @@ export function StoreProvider({ children }) {
 
     const value = {
         user,
-        firstName,
-        lastName,
-        email,
+        userData, // Provide the full user data object for components to access
         selectedGenres,
         previousPurchases,
         cart,
         isAuthReady,
         setUser,
-        setFirst,
-        setLast,
-        setEmail,
         setSelected,
         setPurchases,
         setCart,
