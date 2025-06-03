@@ -139,6 +139,7 @@
     transition: all 0.3s ease;
     cursor: pointer;
     font-size: 1.25rem;
+    margin-bottom: 2rem;
 }
 
 .checkout-button:hover:enabled {
