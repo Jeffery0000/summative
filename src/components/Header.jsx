@@ -7,14 +7,15 @@ import { auth } from '../firebase/index.js';
 
 function Header() {
     const navigate = useNavigate();
-    const { user } = useStoreContext();
-    
-    // Enhanced display name extraction with fallbacks
-    const firstName = user?.displayName 
-        ? user.displayName.split(' ')[0] 
-        : user?.email 
-            ? user.email.split('@')[0] 
-            : 'User';
+    const { user, firstName } = useStoreContext();
+
+    // Use firstName from context first, then fall back to other methods
+    const displayName = firstName ||
+        (user?.displayName
+            ? user.displayName.split(' ')[0]
+            : user?.email
+                ? user.email.split('@')[0]
+                : 'User');
 
     const handleLogout = async () => {
         try {
@@ -37,7 +38,7 @@ function Header() {
             </div>
             <div className="welcome-container">
                 {user && (
-                    <p className="welcome-message">Hello, {firstName}!</p>
+                    <p className="welcome-message">Hello, {displayName}!</p>
                 )}
             </div>
             <div className="header-buttons">
