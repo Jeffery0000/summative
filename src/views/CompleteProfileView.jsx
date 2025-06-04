@@ -15,7 +15,6 @@ function CompleteProfileView() {
     const firstName = useRef('');
     const lastName = useRef('');
 
-    // Get data passed from RegisterView
     const { isGoogleUser, email, displayName } = location.state || {};
 
     useEffect(() => {
@@ -24,7 +23,6 @@ function CompleteProfileView() {
             return;
         }
 
-        // Pre-fill name fields if available from Google account
         if (displayName) {
             const names = displayName.split(' ');
             if (firstName.current) {
@@ -69,7 +67,6 @@ function CompleteProfileView() {
 
             const selectedGenres = genres.filter((genre) => selectedGenresIds.includes(genre.id));
 
-            // Save user data to Firestore
             const userData = {
                 firstName: firstName.current.value,
                 lastName: lastName.current.value,
@@ -81,10 +78,8 @@ function CompleteProfileView() {
 
             await setDoc(doc(firestore, "users", user.uid), userData);
 
-            // Update context
             setSelected(selectedGenres);
 
-            // Navigate to genres page
             navigate('/movies/genre/' + selectedGenresIds[0]);
 
         } catch (error) {
@@ -98,51 +93,51 @@ function CompleteProfileView() {
     return (
         <div className='register'>
             <h1 className="register-title">Complete Your Profile</h1>
-            
+
             {error && <div className="error-message">{error}</div>}
-            
+
             <form className='register-form' onSubmit={handleCompleteProfile}>
                 <label htmlFor="first-name" className='form-label'>First name</label>
-                <input 
-                    id='first-name' 
-                    type="text" 
-                    name='first-name' 
-                    className='form-input' 
-                    ref={firstName} 
+                <input
+                    id='first-name'
+                    type="text"
+                    name='first-name'
+                    className='form-input'
+                    ref={firstName}
                     disabled={loading}
-                    required 
+                    required
                 />
-                
+
                 <label htmlFor="last-name" className='form-label'>Last name</label>
-                <input 
-                    id='last-name' 
-                    type="text" 
-                    name='last-name' 
-                    className='form-input' 
-                    ref={lastName} 
+                <input
+                    id='last-name'
+                    type="text"
+                    name='last-name'
+                    className='form-input'
+                    ref={lastName}
                     disabled={loading}
-                    required 
+                    required
                 />
-                
+
                 <label htmlFor="email" className='form-label'>Email</label>
-                <input 
-                    id='email' 
-                    type="email" 
-                    name='email' 
-                    className='form-input email-display' 
-                    value={email || user?.email || ''} 
-                    readOnly 
+                <input
+                    id='email'
+                    type="email"
+                    name='email'
+                    className='form-input email-display'
+                    value={email || user?.email || ''}
+                    readOnly
                 />
-                
+
                 <div className='genre-selection'>
                     <h2>Choose Your Favourite Genres:</h2>
                     <div className='genre-checkboxes'>
                         {genres.map((item) => {
                             return (
                                 <div key={item.id}>
-                                    <input 
-                                        type='checkbox' 
-                                        id={`genre-${item.id}`} 
+                                    <input
+                                        type='checkbox'
+                                        id={`genre-${item.id}`}
                                         ref={(el) => (checkBoxes.current[item.id] = el)}
                                         disabled={loading}
                                     />
@@ -152,10 +147,10 @@ function CompleteProfileView() {
                         })}
                     </div>
                 </div>
-                
-                <button 
-                    type='submit' 
-                    className='submit-button' 
+
+                <button
+                    type='submit'
+                    className='submit-button'
                     disabled={loading}
                 >
                     {loading ? 'Saving...' : 'Complete Registration'}

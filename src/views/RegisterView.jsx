@@ -43,7 +43,6 @@ function RegisterView() {
 
     const checkBoxes = useRef({});
 
-    // If user is already logged in, redirect to movies page
     useEffect(() => {
         if (user) {
             navigate('/movies/genre/28');
@@ -83,16 +82,14 @@ function RegisterView() {
                 return;
             }
 
-            // Create user with email and password
             const userCredential = await createUserWithEmailAndPassword(
                 auth,
                 email.current.value,
                 password.current.value
             );
-            
-            setUser(userCredential.user); // Explicitly set the user in context
 
-            // Save user data to Firestore
+            setUser(userCredential.user);
+
             const userData = {
                 firstName: firstName.current.value,
                 lastName: lastName.current.value,
@@ -104,11 +101,9 @@ function RegisterView() {
 
             await saveUserData(userCredential.user.uid, userData);
 
-            // Update context
             setSelected(selectedGenres);
             setCart([]);
 
-            // Navigate to movies page
             navigate('/movies/genre/' + selectedGenresIds[0]);
 
         } catch (error) {
@@ -130,17 +125,14 @@ function RegisterView() {
             const result = await signInWithPopup(auth, googleProvider);
             const user = result.user;
             setUser(user);
-            
-            // Check if user exists in Firestore
+
             const userDoc = await getDoc(doc(firestore, "users", user.uid));
-            
+
             if (userDoc.exists()) {
-                // Existing user, navigate to movies
                 const userData = userDoc.data();
                 setSelected(userData.selectedGenres || []);
                 navigate('/movies');
             } else {
-                // New Google user, navigate to complete profile
                 navigate('/register/complete-profile', {
                     state: {
                         isGoogleUser: true,

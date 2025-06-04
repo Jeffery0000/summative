@@ -11,26 +11,9 @@ function CartView() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  // Retrieve cart from localStorage on initial load for persistence
-  useEffect(() => {
-    const savedCart = localStorage.getItem('cart');
-    if (savedCart) {
-      try {
-        const parsedCart = JSON.parse(savedCart);
-        // Only update if current cart is empty and localStorage has items
-        if (cart.length === 0 && parsedCart.length > 0) {
-          setCart(parsedCart);
-        }
-      } catch (error) {
-        console.error('Error parsing cart from localStorage:', error);
-      }
-    }
-  }, []);
-
   const removeFromCart = (movieId) => {
     const updatedCart = cart.filter(item => item.id !== movieId);
     setCart(updatedCart);
-    // Cart will be saved to localStorage via the context useEffect
   };
 
   const processCheckout = async () => {
@@ -44,8 +27,6 @@ function CartView() {
       const success = await handleCheckout();
       if (success) {
         setCheckoutSuccess(true);
-        // Clear cart in localStorage too
-        localStorage.removeItem('cart');
         setTimeout(() => {
           setCheckoutSuccess(false);
         }, 3000);

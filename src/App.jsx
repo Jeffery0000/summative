@@ -23,8 +23,6 @@ function App() {
           <Route path="/register" element={<RegisterView />} />
           <Route path="/register/complete-profile" element={<CompleteProfileView />} />
           <Route path="/login" element={<LoginView />} />
-          
-          {/* Protected Routes */}
           <Route element={<ProtectedRoutes />}>
             <Route path="/settings" element={<SettingsView />} />
             <Route path="/cart" element={<CartView />} />
@@ -34,7 +32,6 @@ function App() {
               <Route path="search" element={<SearchView />} />
             </Route>
           </Route>
-          
           <Route path="*" element={<ErrorView />} />
         </Routes>
       </BrowserRouter>

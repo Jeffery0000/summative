@@ -22,7 +22,7 @@ function LoginView() {
         try {
             const userCredential = await signInWithEmailAndPassword(auth, email, password);
             setUser(userCredential.user);
-            navigate('/movies'); // Changed from '/' to '/movies'
+            navigate('/movies');
         } catch (error) {
             setError(error.message || 'Failed to sign in with email and password');
             console.error("Login error:", error);
@@ -40,14 +40,11 @@ function LoginView() {
             const user = result.user;
             setUser(user);
 
-            // Check if user exists in Firestore
             const userDoc = await getDoc(doc(firestore, "users", user.uid));
 
             if (userDoc.exists()) {
-                // Existing user, navigate to home
                 navigate('/movies');
             } else {
-                // New Google user, navigate to complete profile
                 navigate('/register/complete-profile', {
                     state: {
                         isGoogleUser: true,

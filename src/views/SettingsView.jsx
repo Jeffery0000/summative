@@ -32,7 +32,6 @@ function SettingsView() {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState({ text: '', type: '' });
 
-  // Form data separate from context to allow editing before saving
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -52,14 +51,12 @@ function SettingsView() {
     { genre: "Horror", id: 27 }
   ];
 
-  // Redirect if not logged in
   useEffect(() => {
     if (isAuthReady && !user) {
       navigate('/login');
     }
   }, [user, navigate, isAuthReady]);
 
-  // Load user data from Firestore directly to ensure we have the most current values
   useEffect(() => {
     const loadUserData = async () => {
       if (!user || !user.uid) return;
@@ -71,18 +68,15 @@ function SettingsView() {
         if (userDoc.exists()) {
           const userData = userDoc.data();
 
-          // Update form data with values from Firestore
           setFormData({
             firstName: userData.firstName || '',
             lastName: userData.lastName || '',
             email: userData.email || user.email || ''
           });
 
-          // Log the loaded data for debugging
           console.log("Loaded user data from Firestore:", userData);
         } else {
           console.log("No user document found in Firestore");
-          // Fallback to auth user info
           setFormData({
             firstName: firstName || '',
             lastName: lastName || '',
@@ -90,7 +84,6 @@ function SettingsView() {
           });
         }
 
-        // Check auth provider
         if (user.providerData && user.providerData.length > 0) {
           const emailProvider = user.providerData.find(
             provider => provider.providerId === 'password'
@@ -105,7 +98,6 @@ function SettingsView() {
     loadUserData();
   }, [user, firstName, lastName, email]);
 
-  // Initialize genre checkboxes when selectedGenres changes
   useEffect(() => {
     if (selectedGenres && selectedGenres.length > 0) {
       setTimeout(() => {
@@ -131,7 +123,6 @@ function SettingsView() {
     setMessage({ text: '', type: '' });
 
     try {
-      // Get selected genres
       const selectedGenresIds = Object.keys(checkBoxes.current)
         .filter((genreId) => checkBoxes.current[genreId]?.checked)
         .map(Number);
@@ -144,19 +135,16 @@ function SettingsView() {
 
       const updatedGenres = genres.filter((genre) => selectedGenresIds.includes(genre.id));
 
-      // Update Firestore document
       const userDocRef = doc(firestore, "users", user.uid);
 
       const updates = {
         selectedGenres: updatedGenres,
       };
 
-      // Only update name fields for email users
       if (isEmailUser) {
         updates.firstName = formData.firstName;
         updates.lastName = formData.lastName;
 
-        // Update Firebase Auth profile
         await updateProfile(auth.currentUser, {
           displayName: `${formData.firstName} ${formData.lastName}`
         });
@@ -164,12 +152,9 @@ function SettingsView() {
 
       await updateDoc(userDocRef, updates);
 
-      // Update context - use updateUserProfile instead of setFirst/setLast
       setSelected(updatedGenres);
 
-      // Update user profile in context if needed
       if (isEmailUser) {
-        // Use the updateUserProfile function from context instead
         await updateUserProfile(user.uid, {
           firstName: formData.firstName,
           lastName: formData.lastName
@@ -197,7 +182,6 @@ function SettingsView() {
         return;
       }
 
-      // Re-authenticate user
       const credential = EmailAuthProvider.credential(
         auth.currentUser.email,
         currentPassword
@@ -205,7 +189,6 @@ function SettingsView() {
 
       await reauthenticateWithCredential(auth.currentUser, credential);
 
-      // Update password
       await updatePassword(auth.currentUser, newPassword);
 
       setMessage({ text: 'Password updated successfully!', type: 'success' });
@@ -225,7 +208,6 @@ function SettingsView() {
     }
   };
 
-  // Show loading if auth is not yet ready or user is not loaded
   if (!isAuthReady || !user) {
     return (
       <div className="settings loading-container">

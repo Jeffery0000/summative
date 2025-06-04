@@ -9,7 +9,6 @@ function Header() {
     const navigate = useNavigate();
     const { user, userData } = useStoreContext();
 
-    // Use firstName from userData (Firestore) first, then fall back to other methods
     const displayName = userData?.firstName || 
         (user?.displayName
             ? user.displayName.split(' ')[0]

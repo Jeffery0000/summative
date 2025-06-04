@@ -206,10 +206,10 @@
     transform-origin: center center;
     transform: translateY(-50%) scale(0) rotate(-45deg);
     transition: transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1),
-                opacity 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
+        opacity 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
 }
 
-.settings .genre-checkboxes input:checked + label::after {
+.settings .genre-checkboxes input:checked+label::after {
     opacity: 1;
     transform: translateY(-50%) scale(1) rotate(0deg);
 }
@@ -428,6 +428,7 @@
         opacity: 0;
         transform: translateY(-0.3125rem);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
@@ -436,16 +437,16 @@
 
 /* Add to your existing SettingsView.css file */
 .loading-container {
-  min-height: 100vh;
-  background: #1d1e22;
+    min-height: 100vh;
+    background: #1d1e22;
 }
 
 .loading-message {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 50vh;
-  color: #00ff88;
-  font-size: 1.5rem;
-  text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50vh;
+    color: #00ff88;
+    font-size: 1.5rem;
+    text-align: center;
 }
