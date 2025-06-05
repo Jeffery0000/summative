@@ -29,8 +29,7 @@ function Footer() {
                     </div>
                     <div className='link-row'>
                         <p>Assignment page</p>
-                        <a href="https://classroom.google.com/c/NzQ3OTAzODQ0Mzcz/a/Nzc4NjY0NTY2MTQx/details"
-                            target="_blank">
+                        <a href="https://classroom.google.com/c/NzQ3OTAzODQ0Mzcz/a/Nzc4NjY0NTY2MTQx/details" target="_blank">
                             <img className="assignment-logo" src={assignmentLogo} alt="assignment Logo" />
                         </a>
                     </div>

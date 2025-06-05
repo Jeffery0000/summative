@@ -156,59 +156,19 @@ function RegisterView() {
 
             <form className='register-form' onSubmit={handleRegister}>
                 <label htmlFor="first-name" className='form-label'>First name</label>
-                <input
-                    id='first-name'
-                    type="text"
-                    name='first-name'
-                    className='form-input'
-                    ref={firstName}
-                    disabled={loading}
-                    required
-                />
+                <input id='first-name' type="text" name='first-name' className='form-input' ref={firstName} disabled={loading} required />
 
                 <label htmlFor="last-name" className='form-label'>Last name</label>
-                <input
-                    id='last-name'
-                    type="text"
-                    name='last-name'
-                    className='form-input'
-                    ref={lastName}
-                    disabled={loading}
-                    required
-                />
+                <input id='last-name' type="text" name='last-name' className='form-input' ref={lastName} disabled={loading} required />
 
                 <label htmlFor="email" className='form-label'>Email</label>
-                <input
-                    id='email'
-                    type="email"
-                    name='email'
-                    className='form-input'
-                    ref={email}
-                    disabled={loading}
-                    required
-                />
+                <input id='email' type="email" name='email' className='form-input' ref={email} disabled={loading} required />
 
                 <label htmlFor="password" className='form-label'>Password</label>
-                <input
-                    id="password"
-                    type='password'
-                    name="password"
-                    className='form-input'
-                    ref={password}
-                    disabled={loading}
-                    required
-                />
+                <input id="password" type='password' name="password" className='form-input' ref={password} disabled={loading} required />
 
                 <label htmlFor="re-password" className='form-label'>Re-enter Password</label>
-                <input
-                    id='re-password'
-                    type='password'
-                    name='re-password'
-                    className='form-input'
-                    ref={confirmedPassword}
-                    disabled={loading}
-                    required
-                />
+                <input id='re-password' type='password' name='re-password' className='form-input' ref={confirmedPassword} disabled={loading} required />
 
                 <div className='genre-selection'>
                     <h2>Choose Your Favourite Genres:</h2>
@@ -216,12 +176,7 @@ function RegisterView() {
                         {genres.map((item) => {
                             return (
                                 <div key={item.id}>
-                                    <input
-                                        type='checkbox'
-                                        id={`genre-${item.id}`}
-                                        ref={(el) => (checkBoxes.current[item.id] = el)}
-                                        disabled={loading}
-                                    />
+                                    <input type='checkbox' id={`genre-${item.id}`} ref={(el) => (checkBoxes.current[item.id] = el)} disabled={loading} />
                                     <label htmlFor={`genre-${item.id}`}>{item.genre}</label>
                                 </div>
                             );
@@ -229,11 +184,7 @@ function RegisterView() {
                     </div>
                 </div>
 
-                <button
-                    type='submit'
-                    className='submit-button'
-                    disabled={loading}
-                >
+                <button type='submit' className='submit-button' disabled={loading}>
                     {loading ? 'Registering...' : 'Register'}
                 </button>
 
@@ -241,12 +192,7 @@ function RegisterView() {
                     <span>OR</span>
                 </div>
 
-                <button
-                    type="button"
-                    className="google-button"
-                    onClick={handleGoogleSignIn}
-                    disabled={loading}
-                >
+                <button type="button" className="google-button" onClick={handleGoogleSignIn} disabled={loading}>
                     Sign in with Google
                 </button>
             </form>

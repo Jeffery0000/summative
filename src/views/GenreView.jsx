@@ -73,11 +73,7 @@ function GenreView() {
                                         )}
                                     </Link>
                                 </div>
-                                <button
-                                    className="buy-button"
-                                    onClick={() => handleBuy(movie.id)}
-                                    disabled={isInCart || isPurchased}
-                                >
+                                <button className="buy-button" onClick={() => handleBuy(movie.id)} disabled={isInCart || isPurchased}>
                                     {isPurchased ? 'Purchased' : isInCart ? 'Added' : 'Buy'}
                                 </button>
                             </div>

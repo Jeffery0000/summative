@@ -9,7 +9,7 @@ function Header() {
     const navigate = useNavigate();
     const { user, userData } = useStoreContext();
 
-    const displayName = userData?.firstName || 
+    const displayName = userData?.firstName ||
         (user?.displayName
             ? user.displayName.split(' ')[0]
             : user?.email

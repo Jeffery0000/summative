@@ -41,11 +41,7 @@ function DetailView() {
             <div className="movie-content">
                 <div className="movie-info">
                     <h1 className="movie-title">{movie.original_title}</h1>
-                    <button
-                        className="buy-button"
-                        onClick={handleBuy}
-                        disabled={isInCart || isPurchased}
-                    >
+                    <button className="buy-button" onClick={handleBuy} disabled={isInCart || isPurchased}>
                         {isPurchased ? 'Purchased' : isInCart ? 'Added' : 'Buy'}
                     </button>
                     <p className="movie-overview">{movie.overview}</p>

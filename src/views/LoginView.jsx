@@ -69,32 +69,12 @@ function LoginView() {
 
             <form className="login-form" onSubmit={handleEmailLogin}>
                 <label htmlFor="email" className="form-label">Email</label>
-                <input
-                    id="email"
-                    className="form-input"
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    disabled={loading}
-                    required
-                />
+                <input id="email" className="form-input" type="email" value={email} onChange={(e) => setEmail(e.target.value)} disabled={loading} required />
 
                 <label htmlFor="password" className="form-label">Password</label>
-                <input
-                    id="password"
-                    className="form-input"
-                    type="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    disabled={loading}
-                    required
-                />
+                <input id="password" className="form-input" type="password" value={password} onChange={(e) => setPassword(e.target.value)} disabled={loading} required />
 
-                <button
-                    type="submit"
-                    className="submit-button"
-                    disabled={loading}
-                >
+                <button type="submit" className="submit-button" disabled={loading}>
                     {loading ? 'Signing in...' : 'Sign In'}
                 </button>
 
@@ -102,12 +82,7 @@ function LoginView() {
                     <span>OR</span>
                 </div>
 
-                <button
-                    type="button"
-                    onClick={handleGoogleLogin}
-                    className="google-button"
-                    disabled={loading}
-                >
+                <button type="button" onClick={handleGoogleLogin} className="google-button" disabled={loading}>
                     Sign in with Google
                 </button>
             </form>

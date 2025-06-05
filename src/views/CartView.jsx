@@ -47,9 +47,7 @@ function CartView() {
       </div>
 
       {checkoutSuccess && (
-        <div className="checkout-success-message">
-          Purchase completed successfully! Thank you for your order.
-        </div>
+        <div className="checkout-success-message">Purchase completed successfully! Thank you for your order.</div>
       )}
 
       <div className="cart-items-container">
@@ -59,29 +57,15 @@ function CartView() {
               {cart.map(movie => (
                 <div key={movie.id} className="cart-item">
                   <Link to={`/movies/details/${movie.id}`}>
-                    <img
-                      className="cart-item-image"
-                      src={`https://image.tmdb.org/t/p/w200${movie.poster_path}`}
-                      alt={movie.title}
-                    />
+                    <img className="cart-item-image" src={`https://image.tmdb.org/t/p/w200${movie.poster_path}`} alt={movie.title} />
                   </Link>
                   <h2 className="cart-item-title">{movie.title}</h2>
-                  <button
-                    className="cart-item-button"
-                    onClick={() => removeFromCart(movie.id)}
-                    disabled={loading}
-                  >
-                    Remove
-                  </button>
+                  <button className="cart-item-button" onClick={() => removeFromCart(movie.id)} disabled={loading}>Remove</button>
                 </div>
               ))}
             </div>
             <div className="checkout-container">
-              <button
-                className="checkout-button"
-                onClick={processCheckout}
-                disabled={loading}
-              >
+              <button className="checkout-button" onClick={processCheckout} disabled={loading}>
                 {loading ? 'Processing...' : 'Checkout'}
               </button>
             </div>
